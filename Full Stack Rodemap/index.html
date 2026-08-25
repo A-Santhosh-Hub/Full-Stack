@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Full Stack Learning Planner — Your Personal Dev Coach</title>
+  <meta name="description" content="A dynamic daily learning planner that generates your Full Stack Developer study schedule automatically based on your available time and roadmap progress.">
+  <meta name="theme-color" content="#0d0f18">
+  <meta property="og:title" content="Full Stack Developer Learning Planner">
+  <meta property="og:description" content="Your personal Full Stack Developer learning coach. Enter your free time, get today's study plan.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234F8EF7'/><text y='72' x='12' font-size='68' font-family='monospace' fill='white'>FS</text></svg>">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <!-- ══════════════════════════════════════════════════
+       APP LAYOUT
+       ═════════════════════════════════════════════════ -->
+  <div class="app-layout">
+
+    <!-- ── Top Header ──────────────────────────────── -->
+    <header class="app-header" role="banner">
+      <div class="header-brand">
+        <div class="header-logo" aria-label="Full Stack Planner Logo">FS</div>
+        <div>
+          <div class="header-title">Full Stack Learning Planner</div>
+          <div class="header-subtitle">Your Personal Dev Coach</div>
+        </div>
+      </div>
+
+      <div class="header-meta">
+        <div class="header-streak-badge" id="header-streak" aria-label="Learning streak">
+          🎯 Start your streak!
+        </div>
+        <div class="header-overall-badge" id="header-overall">0% Complete</div>
+        <div class="header-month-badge" id="header-month">Month 1 of 12</div>
+        <div class="header-rhythm-badge" id="header-rhythm">
+          🧠 <span>New Concept Day</span>
+        </div>
+        <div class="header-date-text" id="header-date"></div>
+      </div>
+    </header>
+
+    <!-- ── Sidebar Navigation ─────────────────────── -->
+    <nav class="sidebar" role="navigation" aria-label="Main navigation">
+      <span class="sidebar-label">Navigate</span>
+
+      <button class="nav-btn active" data-section="today" id="nav-today" aria-label="Today's plan">
+        <span class="nav-icon">🏠</span>
+        Today's Plan
+      </button>
+
+      <button class="nav-btn" data-section="progress" id="nav-progress" aria-label="Progress dashboard">
+        <span class="nav-icon">📊</span>
+        Progress
+      </button>
+
+      <button class="nav-btn" data-section="history" id="nav-history" aria-label="Learning history">
+        <span class="nav-icon">📅</span>
+        History
+      </button>
+
+      <button class="nav-btn" data-section="roadmap" id="nav-roadmap" aria-label="Full roadmap">
+        <span class="nav-icon">🗺️</span>
+        Roadmap
+      </button>
+
+      <span class="sidebar-label">Manage</span>
+
+      <button class="nav-btn" data-section="settings" id="nav-settings" aria-label="Settings">
+        <span class="nav-icon">⚙️</span>
+        Settings
+      </button>
+    </nav>
+
+    <!-- ── Main Content ────────────────────────────── -->
+    <main class="main-content" role="main">
+
+      <!-- ─── TODAY SECTION ──────────────────────────── -->
+      <section id="section-today" class="section active" aria-label="Today's learning plan">
+
+        <!-- Mini Progress Bars -->
+        <div id="mini-progress-bar" aria-label="Progress overview"></div>
+
+        <!-- Next Task Banner -->
+        <div id="next-task-banner" aria-label="Next recommended task"></div>
+
+        <!-- Time Picker (shown first visit / when no plan) -->
+        <div id="time-picker-section" style="display:block" role="form" aria-label="Time selection"></div>
+
+        <!-- Today's Plan (shown after generation) -->
+        <div id="todays-plan-section" style="display:none" aria-label="Today's tasks"></div>
+
+      </section>
+
+      <!-- ─── PROGRESS SECTION ───────────────────────── -->
+      <section id="section-progress" class="section" aria-label="Progress dashboard"></section>
+
+      <!-- ─── HISTORY SECTION ────────────────────────── -->
+      <section id="section-history" class="section" aria-label="Learning history"></section>
+
+      <!-- ─── ROADMAP SECTION ────────────────────────── -->
+      <section id="section-roadmap" class="section" aria-label="12-month roadmap"></section>
+
+      <!-- ─── SETTINGS SECTION ──────────────────────── -->
+      <section id="section-settings" class="section" aria-label="Settings"></section>
+
+    </main>
+  </div>
+
+  <!-- ── Mobile Bottom Navigation ──────────────────── -->
+  <nav class="mobile-nav" role="navigation" aria-label="Mobile navigation">
+    <button class="mobile-nav-btn active" data-section="today" aria-label="Today">
+      <span class="nav-icon">🏠</span>
+      <span>Today</span>
+    </button>
+    <button class="mobile-nav-btn" data-section="progress" aria-label="Progress">
+      <span class="nav-icon">📊</span>
+      <span>Progress</span>
+    </button>
+    <button class="mobile-nav-btn" data-section="history" aria-label="History">
+      <span class="nav-icon">📅</span>
+      <span>History</span>
+    </button>
+    <button class="mobile-nav-btn" data-section="roadmap" aria-label="Roadmap">
+      <span class="nav-icon">🗺️</span>
+      <span>Roadmap</span>
+    </button>
+    <button class="mobile-nav-btn" data-section="settings" aria-label="Settings">
+      <span class="nav-icon">⚙️</span>
+      <span>Settings</span>
+    </button>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════
+       SCRIPTS — Load order matters:
+       1. roadmap.js   (data — no deps)
+       2. scheduler.js (uses roadmap.js globals)
+       3. progress.js  (uses scheduler.js)
+       4. history.js   (uses progress.js)
+       5. ui.js        (uses all above)
+       6. app.js       (wires everything)
+       ═════════════════════════════════════════════════ -->
+  <script src="js/roadmap.js"></script>
+  <script src="js/scheduler.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
